@@ -1,6 +1,6 @@
 [package]
 version = "0.1.0"
-name = "{{project-name}}"
+name = "seed-board"
 repository = "https://github.com/seed-rs/seed-quickstart"
 authors = ["{{authors}}"]
 description = "App Description"
@@ -15,8 +15,11 @@ crate-type = ["cdylib"]
 [dev-dependencies]
 wasm-bindgen-test = "0.3.18"
 
+
 [dependencies]
-seed = "0.8.0"
+seed = { git = "https://github.com/seed-rs/seed"}
+thiserror= "*"
+anyhow = "*"
 
 [profile.release]
 lto = true
@@ -25,3 +28,79 @@ codegen-units = 1
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = ['-Os']
+
+[dependencies.web-sys]
+version = "0.3.47"
+features = [
+    "AbortController",
+    "AbortSignal",
+    "BeforeUnloadEvent",
+    "Blob",
+    "BinaryType",
+    "CanvasRenderingContext2d",
+    "CloseEvent",
+    "console",
+    "CustomEvent",
+    "CustomEventInit",
+    "DataTransfer",
+    "Document",
+    "DomException",
+    "DragEvent",
+    "Element",
+    "Event",
+    "EventTarget",
+    "File",
+    "FormData",
+    "HashChangeEvent",
+    "Headers",
+    "History",
+    "HtmlElement",
+    "HtmlDivElement",
+    "HtmlCanvasElement",
+    "HtmlCollection",
+    "HtmlDocument",
+    "HtmlInputElement",
+    "HtmlMenuItemElement",
+    "HtmlProgressElement",
+    "HtmlOptionElement",
+    "HtmlDataElement",
+    "HtmlMeterElement",
+    "HtmlLiElement",
+    "HtmlOutputElement",
+    "HtmlParamElement",
+    "HtmlTextAreaElement",
+    "HtmlSelectElement",
+    "HtmlButtonElement",
+    "SvgElement",
+    "Location",
+    "MessageEvent",
+    "MouseEvent",
+    "Navigator",
+    "Node",
+    "NodeList",
+    "Performance",
+    "PointerEvent",
+    "PopStateEvent",
+    "ReferrerPolicy",
+    "Request",
+    "RequestCache",
+    "RequestCredentials",
+    "RequestInit",
+    "RequestMode",
+    "RequestRedirect",
+    "Response",
+    "Selection",
+    "Storage",
+    "TcpReadyState",
+    "Text",
+    "Touch",
+    "TouchEvent",
+    "TouchList",
+    "console",
+    "WebSocket",
+    "Window",
+    "KeyboardEvent",
+    "InputEvent",
+    "Url",
+    "UrlSearchParams",
+]
