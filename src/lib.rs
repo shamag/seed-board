@@ -81,7 +81,8 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
         Msg::ClickBoard(row, column) => {
             web_sys::console::log_2(&(row as i32).into(), &(column as i32).into());
             if let Some(pos) = model.drag_start {
-                model.board.pieces[pos].position = PiecePosition{row, column}
+                model.board.pieces[pos].position = PiecePosition{row, column};
+                model.drag_start = None;
             }
         },
         Msg::Click(piece) => {
@@ -156,6 +157,7 @@ fn view(model: &Model) -> impl IntoNodes<Msg> {
                         }
                     ]
                 ],
+                draw_active(model),
                 draw_pieces(model),
                 //el_ref(&model.canvas),
                 style![
@@ -165,6 +167,33 @@ fn view(model: &Model) -> impl IntoNodes<Msg> {
             ],
         ],
         button!["Change color", ev(Ev::Click, |_| Msg::ChangeColor)],
+    ]
+}
+
+
+fn draw_active(model: &Model) -> Node<Msg> {
+    web_sys::console::log_1(&"draw_pieces".into());
+    g![
+        C!["selected"],
+        IF!(model.drag_start.is_some() => {
+            let pos = model.drag_start.unwrap();
+            let pos_y = model.board.pieces[pos].position.row as i32;
+            let pos_x = model.board.pieces[pos].position.column as i32;
+            let poss_x = (pos_x) * (BOARD_SIZE / 8);
+            let poss_y = (7 - pos_y) * (BOARD_SIZE / 8);
+
+            rect![
+                attrs!{
+                    At::Fill => "#044B94"
+                    At::Opacity => "0.4"
+                    At::X => px(poss_x),
+                    At::Y => px(poss_y),
+                    At::Width => px(50),
+                    At::Height => px(50)
+                },
+        ]
+        })
+
     ]
 }
 
