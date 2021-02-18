@@ -9,6 +9,19 @@ pub enum PieceType {
     Queen,
     King,
 }
+impl PieceType {
+    fn from_fen_char(ch: &char) -> Self {
+        match ch {
+            'p' | 'P' => Self::Pawn,
+            'n' | 'N' => Self::Knight,
+            'b' | 'B' => Self::Bishop,
+            'r' | 'R' => Self::Rook,
+            'q' | 'Q' => Self::Queen,
+            'k' | 'K' => Self::King,
+            _ => unreachable!()
+        }
+    }
+}
 
 #[derive(PartialEq, Copy, Clone)]
 pub enum Color {
@@ -41,6 +54,9 @@ impl Piece {
 
         let second = match self {
             Self{piece_type: PieceType::Pawn, ..} => "p",
+            Self{piece_type: PieceType::Knight, ..} => "n",
+            Self{piece_type: PieceType::King, ..} => "k",
+            Self{piece_type: PieceType::Bishop, ..} => "b",
             _ => "q"
         };
         format!("{}{}", first, second)
@@ -50,5 +66,15 @@ impl Piece {
         let offset_x = self.position.column as i32 as f32 * 12.5f32;
         let offset_y = (7 - self.position.row as i32) as f32 * 12.5f32;
         return (offset_x, offset_y)
+    }
+    pub fn from_fen_char(ch: &char, row: i32, column:i32) -> Self {
+        Piece{
+            position: PiecePosition{
+                column: column.into(),
+                row: row.into(),
+            },
+            color: if ch.is_lowercase() {Color::Black} else {Color::White},
+            piece_type: PieceType::from_fen_char(ch),
+        }
     }
 }
