@@ -41,28 +41,6 @@ struct Model {
     drag_start: Option<usize>
 }
 
-// ------ Color -------
-
-#[derive(Copy, Clone, PartialEq, Eq)]
-enum Color {
-    A,
-    B,
-}
-
-impl Color {
-    const fn as_str(&self) -> &str {
-        match self {
-            Self::A => "white",
-            Self::B => "green",
-        }
-    }
-}
-
-impl Default for Color {
-    fn default() -> Self {
-        Self::A
-    }
-}
 
 // ------ ------
 //    Update

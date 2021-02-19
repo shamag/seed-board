@@ -14,14 +14,11 @@ pub enum ChessError {
     #[error("Fen contains incorrect data")]
     WrongFen,
 
-    /// Represents all other cases of `std::io::Error`.
     #[error(transparent)]
     IOError(#[from] std::io::Error),
 }
 
 impl Board {
-    /// Construct a new `Board` that is completely empty.
-    /// Note: This does NOT give you the initial position.  Just a blank slate.
     fn new() -> Board {
         Board {
             pieces: vec![Piece{
@@ -93,14 +90,6 @@ impl From<i32> for PositionRow {
     }
 }
 
-
-// impl Default for Board {
-//     #[inline]
-//     fn default() -> Board {
-//         Board::new()
-//     }
-// }
-
 impl Default for Board {
     #[inline]
     fn default() -> Board {
@@ -140,68 +129,12 @@ impl FromStr for Board {
                 '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' => {
                     column = column + (x as i32) - 1;
                 }
-                // 'r' => {
-                //     web_sys::console::log_2(&(row as i32).into(), &(column as i32).into());
-
-                //     board.pieces.push(Piece::from_fen_char(&x, row, column))
-                // }
-                // 'R' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Rook, Color::White));
-                //     cur_file = cur_file.right();
-                // }
-                // 'n' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Knight, Color::Black));
-                //     cur_file = cur_file.right();
-                // }
-                // 'N' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Knight, Color::White));
-                //     cur_file = cur_file.right();
-                // }
-                // 'b' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Bishop, Color::Black));
-                //     cur_file = cur_file.right();
-                // }
-                // 'B' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Bishop, Color::White));
-                //     cur_file = cur_file.right();
-                // }
-                // 'p' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Pawn, Color::Black));
-                //     cur_file = cur_file.right();
-                // }
-                // 'P' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Pawn, Color::White));
-                //     cur_file = cur_file.right();
-                // }
-                // 'q' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Queen, Color::Black));
-                //     cur_file = cur_file.right();
-                // }
-                // 'Q' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::Queen, Color::White));
-                //     cur_file = cur_file.right();
-                // }
-                // 'k' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::King, Color::Black));
-                //     cur_file = cur_file.right();
-                // }
-                // 'K' => {
-                //     fen[Square::make_square(cur_rank, cur_file)] =
-                //         Some((Piece::King, Color::White));
-                //     cur_file = cur_file.right();
-                // }
                 _ => {
-                    board.pieces.push(Piece::from_fen_char(&x, row, column))
+                    let pieace = match Piece::from_fen_char(&x, row, column) {
+                        Ok(p) => p,
+                        Err(_)=> return Err(ChessError::WrongFen)
+                    };
+                    board.pieces.push(pieace)
                 }
 
             }

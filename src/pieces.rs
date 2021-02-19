@@ -1,5 +1,5 @@
 use crate::board::{PositionRow, PositionColumn};
-
+use anyhow::{Result, anyhow};
 #[derive(Copy, Clone)]
 pub enum PieceType {
     Pawn,
@@ -10,16 +10,16 @@ pub enum PieceType {
     King,
 }
 impl PieceType {
-    fn from_fen_char(ch: &char) -> Self {
-        match ch {
+    fn from_fen_char(ch: &char) -> anyhow::Result<Self> {
+        Ok(match ch {
             'p' | 'P' => Self::Pawn,
             'n' | 'N' => Self::Knight,
             'b' | 'B' => Self::Bishop,
             'r' | 'R' => Self::Rook,
             'q' | 'Q' => Self::Queen,
             'k' | 'K' => Self::King,
-            _ => unreachable!()
-        }
+            _ => return Err(anyhow!("wrong fen"))
+        })
     }
 }
 
@@ -44,6 +44,11 @@ pub struct PiecePosition {
 
 
 
+// impl PiecePosition {
+//     pub fn from_coords(roe)
+// }
+
+
 impl Piece {
     pub fn name(&self) -> String {
         let first = if self.color == Color::White {
@@ -62,19 +67,18 @@ impl Piece {
         format!("{}{}", first, second)
     }
     pub fn board_position(&self) -> (f32, f32) {
-
         let offset_x = self.position.column as i32 as f32 * 12.5f32;
         let offset_y = (7 - self.position.row as i32) as f32 * 12.5f32;
         return (offset_x, offset_y)
     }
-    pub fn from_fen_char(ch: &char, row: i32, column:i32) -> Self {
-        Piece{
+    pub fn from_fen_char<Y: Into<PositionRow>, X:Into<PositionColumn>>(ch: &char, row: Y, column: X) -> Result<Self> {
+        Ok(Piece{
             position: PiecePosition{
                 column: column.into(),
                 row: row.into(),
             },
             color: if ch.is_lowercase() {Color::Black} else {Color::White},
-            piece_type: PieceType::from_fen_char(ch),
-        }
+            piece_type: PieceType::from_fen_char(ch)?,
+        })
     }
 }
