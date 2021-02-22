@@ -1,6 +1,9 @@
-use crate::board::{PositionRow, PositionColumn};
+pub use crate::engine::square::{Square, PositionRow, PositionColumn};
 use anyhow::{Result, anyhow};
-#[derive(Copy, Clone)]
+use crate::error::{ChessError};
+use std::str::FromStr;
+
+#[derive(Copy, Clone, Debug)]
 pub enum PieceType {
     Pawn,
     Knight,
@@ -23,28 +26,37 @@ impl PieceType {
     }
 }
 
-#[derive(PartialEq, Copy, Clone)]
+#[derive(PartialEq, Copy, Clone, Debug)]
 pub enum Color {
    White,
    Black
 }
 
-#[derive(Copy, Clone)]
+impl Color {
+    pub fn next(self) -> Self {
+        if self == Self::White {
+            Self::Black
+        } else {
+            Self::White
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
 pub struct Piece {
     pub piece_type: PieceType,
     pub color: Color,
-    pub position: PiecePosition
-}
-
-#[derive(Copy, Clone, PartialEq)]
-pub struct PiecePosition {
-    pub row: PositionRow,
-    pub column: PositionColumn
+    pub position: Square
 }
 
 
 
-// impl PiecePosition {
+
+
+
+
+
+// impl Square {
 //     pub fn from_coords(roe)
 // }
 
@@ -62,6 +74,7 @@ impl Piece {
             Self{piece_type: PieceType::Knight, ..} => "n",
             Self{piece_type: PieceType::King, ..} => "k",
             Self{piece_type: PieceType::Bishop, ..} => "b",
+            Self{piece_type: PieceType::Rook, ..} => "r",
             _ => "q"
         };
         format!("{}{}", first, second)
@@ -73,7 +86,7 @@ impl Piece {
     }
     pub fn from_fen_char<Y: Into<PositionRow>, X:Into<PositionColumn>>(ch: &char, row: Y, column: X) -> Result<Self> {
         Ok(Piece{
-            position: PiecePosition{
+            position: Square{
                 column: column.into(),
                 row: row.into(),
             },
