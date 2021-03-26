@@ -6,7 +6,14 @@ mod engine;
 mod game;
 mod error;
 pub use crate::pieces::*;
-pub use crate::engine::square::{Square, PositionRow, PositionColumn};
+pub use crate::engine::square::{Position, PositionRow, PositionColumn};
+
+
+/// # Examples
+///
+/// ```
+/// let x = 5;
+/// ```
 
 const BOARD_SIZE: i32 = 400;
 
@@ -60,8 +67,8 @@ fn update(msg: Msg, model: &mut Model, orders: &mut impl Orders<Msg>) {
         Msg::ClickBoard(row, column) => {
             web_sys::console::log_2(&(row as i32).into(), &(column as i32).into());
             if let Some(pos) = model.drag_start {
-                model.game = model.game.perfome_move(Move::Move(pos, Square{row, column}));
-                // model.game.board.pieces[pos].position = Square{row, column};
+                model.game = model.game.perfome_move(Move::Move(pos, Position{row, column}));
+                // model.game.board.pieces[pos].position = Position{row, column};
                 model.drag_start = None;
             }
         },

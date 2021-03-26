@@ -1,5 +1,5 @@
 use crate::pieces::{Piece, Color, PieceType};
-pub use crate::engine::square::{Square, PositionRow, PositionColumn};
+pub use crate::engine::square::{Position, PositionRow, PositionColumn};
 use crate::error::{ChessError};
 use anyhow::{Context, Result};
 use thiserror::Error;
@@ -17,12 +17,12 @@ impl ViewBoard {
             pieces: vec![Piece{
                 color: Color::White,
                 piece_type: PieceType::Pawn,
-                position: Square{row: PositionRow::Seven, column: PositionColumn::C}
+                position: Position{row: PositionRow::Seven, column: PositionColumn::C}
             },
             Piece{
                 color: Color::White,
                 piece_type: PieceType::Rook,
-                position: Square{row: PositionRow::One, column: PositionColumn::H}
+                position: Position{row: PositionRow::One, column: PositionColumn::H}
             }]
         }
     }

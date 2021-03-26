@@ -4,10 +4,29 @@ use crate::error::ChessError;
 
 
 #[derive(Copy, Clone, PartialEq, Debug, PartialOrd)]
-pub struct Square {
+pub struct Position {
     pub row: PositionRow,
     pub column: PositionColumn
 }
+
+#[derive(PartialEq, Ord, Eq, PartialOrd, Copy, Clone, Debug, Hash)]
+pub struct Square(u8);
+
+impl From<Position> for Square {
+    fn from(value: Position) -> Self {
+        Square((value.row as i32 * 8 + value.column as i32) as u8)
+    }
+}
+
+// impl From<Square> for Position {
+//     fn from(value: Square) -> Self {
+//         Square((value.row as i32 * 8 + value.column as i32) as u8)
+//     }
+// }
+
+// impl Position {
+//     pub fn from
+// }
 
 #[derive(Copy, Clone, PartialEq, Debug, PartialOrd)]
 pub enum PositionColumn{
@@ -63,7 +82,7 @@ impl From<i32> for PositionRow {
         }
     }
 }
-impl FromStr for Square {
+impl FromStr for Position {
     type Err = ChessError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -90,3 +109,25 @@ impl FromStr for Square {
         })
     }
     }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn position_to_square() {
+        let p = Position{
+            row: PositionRow::Two,
+            column: PositionColumn:: E
+        };
+        let s = p.into();
+        assert_eq!(Square(12u8), s);
+
+        let p = Position{
+            row: PositionRow::Eight,
+            column: PositionColumn:: H
+        };
+        let s = p.into();
+
+        assert_eq!(Square(63u8), s);
+    }
+}

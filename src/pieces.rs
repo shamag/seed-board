@@ -1,4 +1,4 @@
-pub use crate::engine::square::{Square, PositionRow, PositionColumn};
+pub use crate::engine::square::{Position, PositionRow, PositionColumn};
 use anyhow::{Result, anyhow};
 use crate::error::{ChessError};
 use std::str::FromStr;
@@ -46,7 +46,7 @@ impl Color {
 pub struct Piece {
     pub piece_type: PieceType,
     pub color: Color,
-    pub position: Square
+    pub position: Position
 }
 
 
@@ -56,7 +56,7 @@ pub struct Piece {
 
 
 
-// impl Square {
+// impl Position {
 //     pub fn from_coords(roe)
 // }
 
@@ -86,7 +86,7 @@ impl Piece {
     }
     pub fn from_fen_char<Y: Into<PositionRow>, X:Into<PositionColumn>>(ch: &char, row: Y, column: X) -> Result<Self> {
         Ok(Piece{
-            position: Square{
+            position: Position{
                 column: column.into(),
                 row: row.into(),
             },

@@ -1,6 +1,6 @@
 use crate::view_board::ViewBoard;
 use crate::pieces::{Color};
-use crate::engine::square::{Square};
+use crate::engine::square::{Position};
 use crate::error::{ChessError};
 use std::str::FromStr;
 
@@ -21,12 +21,12 @@ pub struct Game {
     // pinned: BitBoard,
     // checkers: BitBoard,
     // hash: u64,
-    pub en_passant: Option<Square>,
+    pub en_passant: Option<Position>,
 }
 #[derive(Copy, Clone, PartialEq, PartialOrd, Debug)]
 pub enum Move{
     Capture(usize, usize),
-    Move(usize, Square)
+    Move(usize, Position)
 }
 
 #[derive(Copy, Clone, PartialEq, PartialOrd, Debug, Hash)]
@@ -71,7 +71,7 @@ impl FromStr for Game {
         let mut board = match ViewBoard::from_str(value) {
             Ok(b) => b,
             Err(_)=> return Err(ChessError::WrongFen)
-        };;
+        };
         let mut game = Self{
             board: board,
             castle_rights: [CastleRights::NoRights, CastleRights::NoRights],
@@ -120,7 +120,7 @@ impl FromStr for Game {
             game.castle_rights[1] = CastleRights::NoRights;
         }
 
-        if let Ok(sq) = Square::from_str(&ep) {
+        if let Ok(sq) = Position::from_str(&ep) {
             game.en_passant = Some(sq);
         }
 
